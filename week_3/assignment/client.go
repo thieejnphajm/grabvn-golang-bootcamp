@@ -37,8 +37,6 @@ func main() {
 func getFeedbackByPassengerID(c *gin.Context) {
 	var params struct {
 		PassengerID int32
-		BookingCode string
-		Feedback    string
 	}
 
 	err := c.BindJSON(&params)
@@ -48,17 +46,17 @@ func getFeedbackByPassengerID(c *gin.Context) {
 		return
 	}
 
-	feedback := &pb.GetPassengerFeedbackRequest{
+	request := &pb.GetPassengerFeedbackRequest{
 		BookingCode: params.BookingCode,
 	}
 
 	var ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	response, err := passengerServiceClient.GetPassengerFeedbackByPassengerId(ctx, feedback)
+	response, err := passengerServiceClient.GetPassengerFeedbackByPassengerId(ctx, request)
 
 	if err != nil {
-		log.Fatalf("Couldn't add feedback: %v", err)
+		log.Fatalf("Couldn't found feedback: %v", err)
 	}
 
 	c.JSON(200, response)
@@ -66,9 +64,7 @@ func getFeedbackByPassengerID(c *gin.Context) {
 
 func getFeedbackByBookingCode(c *gin.Context) {
 	var params struct {
-		PassengerID int32
 		BookingCode string
-		Feedback    string
 	}
 
 	err := c.BindJSON(&params)
@@ -78,17 +74,17 @@ func getFeedbackByBookingCode(c *gin.Context) {
 		return
 	}
 
-	feedback := &pb.GetPassengerFeedbackRequest{
+	request := &pb.GetPassengerFeedbackRequest{
 		BookingCode: params.BookingCode,
 	}
 
 	var ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	response, err := passengerServiceClient.GetPassengerFeedbackByBookingCode(ctx, feedback)
+	response, err := passengerServiceClient.GetPassengerFeedbackByBookingCode(ctx, request)
 
 	if err != nil {
-		log.Fatalf("Couldn't add feedback: %v", err)
+		log.Fatalf("Couldn't found feedback: %v", err)
 	}
 
 	c.JSON(200, response)
@@ -97,8 +93,6 @@ func getFeedbackByBookingCode(c *gin.Context) {
 func deletePassengerFeedback(c *gin.Context) {
 	var params struct {
 		PassengerID int32
-		BookingCode string
-		Feedback    string
 	}
 
 	err := c.BindJSON(&params)
@@ -108,17 +102,17 @@ func deletePassengerFeedback(c *gin.Context) {
 		return
 	}
 
-	feedback := &pb.DeletePassengerFeedbackRequest{
+	request := &pb.DeletePassengerFeedbackRequest{
 		PassengerID: params.PassengerID,
 	}
 
 	var ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	response, err := passengerServiceClient.DeletePassengerFeedbackPassengerId(ctx, feedback)
+	response, err := passengerServiceClient.DeletePassengerFeedbackPassengerId(ctx, request)
 
 	if err != nil {
-		log.Fatalf("Couldn't add feedback: %v", err)
+		log.Fatalf("Couldn't delete feedback: %v", err)
 	}
 
 	c.JSON(200, response)
